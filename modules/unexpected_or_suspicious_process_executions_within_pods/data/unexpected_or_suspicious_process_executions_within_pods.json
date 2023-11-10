@@ -1,0 +1,114 @@
+{
+  "name": "unexpected_or_suspicious_process_executions_within_pods",
+  "description": "Unexpected or suspicious process executions within pods are a common occurrence in software development. These incidents occur when processes are executed within pods that are not part of the expected application behavior. This type of incident can lead to security risks, system instability, and data loss. To mitigate these risks, alerts are triggered to notify software engineers of any unexpected or suspicious process executions.",
+  "params": [
+    {
+      "name": "NAMESPACE",
+      "value": ""
+    },
+    {
+      "name": "POD_NAME",
+      "value": ""
+    },
+    {
+      "name": "POLICY_NAME",
+      "value": ""
+    },
+    {
+      "name": "K8S_CLUSTER_NAME",
+      "value": ""
+    }
+  ],
+  "cells": [
+    {
+      "name": "cell_1",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Unexpected or Suspicious Process Executions within Pods.\nUnexpected or suspicious process executions within pods are a common occurrence in software development. These incidents occur when processes are executed within pods that are not part of the expected application behavior. This type of incident can lead to security risks, system instability, and data loss. To mitigate these risks, alerts are triggered to notify software engineers of any unexpected or suspicious process executions."
+    },
+    {
+      "name": "cell_2",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Get a list of all pods in the affected namespace"
+    },
+    {
+      "name": "cell_3",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl get pods -n ${NAMESPACE}`"
+    },
+    {
+      "name": "cell_4",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Inspect the logs for a specific pod to see if there are any suspicious process executions"
+    },
+    {
+      "name": "cell_5",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl logs ${POD_NAME} -n ${NAMESPACE}`"
+    },
+    {
+      "name": "cell_6",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check if any unauthorized processes are running within a pod"
+    },
+    {
+      "name": "cell_7",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE | name=$POD_NAME | `kubectl exec ${POD_NAME} -n ${NAMESPACE} ps -ef`"
+    },
+    {
+      "name": "cell_8",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the network connections for a specific pod to see if there are any suspicious connections"
+    },
+    {
+      "name": "cell_9",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE | name=$POD_NAME | `kubectl exec ${POD_NAME} -n ${NAMESPACE} netstat -tulpn`"
+    },
+    {
+      "name": "cell_10",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the pod's environment variables to see if there are any unexpected variables that could be causing issues"
+    },
+    {
+      "name": "cell_11",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE | name=$POD_NAME | `kubectl exec ${POD_NAME} -n ${NAMESPACE} env`"
+    },
+    {
+      "name": "cell_12",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the pod's configuration to see if there are any issues or misconfigurations"
+    },
+    {
+      "name": "cell_13",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | limit=1 | random=1 | `kubectl describe pod ${POD_NAME} -n ${NAMESPACE}`"
+    },
+    {
+      "name": "cell_14",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Implement security measures like network policies, container isolation, and pod security policies to prevent unauthorized process execution within the pods."
+    },
+    {
+      "name": "cell_15",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "pod | k8s_cluster_name=$K8S_CLUSTER_NAME | app='shoreline' | random=1 | limit=1 | invoke_apply_policies($NAMESPACE, $POD_NAME, $POLICY_NAME)"
+    }
+  ]
+}
